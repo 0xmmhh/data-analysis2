@@ -7,11 +7,11 @@ from sklearn import tree
 
 print("Diamond rank league of legends statistics at minute 10.")
 #narazie tylko dla blue side robię bo nwm co robię
-lolDataFrame = pd.read_csv('data.csv',  delimiter=',', decimal='.')
-lolFeaturesDataFrame = pd.DataFrame(lolDataFrame, columns=['blueFirstBlood', 'blueKills', 'blueDeaths', 'blueAssists', 'blueEliteMonsters', 'blueDragons', 'blueHeralds', 'blueTowersDestroyed', 'blueGoldDiff', 'blueExperienceDiff'])
+lolDataFrame = pd.read_csv('datav2.csv',  delimiter=',', decimal='.')
+lolFeaturesDataFrame = pd.DataFrame(lolDataFrame, columns=['blueKillDiff', 'blueGoldDiff', 'blueExperienceDiff'])
 lolWinDataFrame = pd.DataFrame(lolDataFrame, columns=['blueWins'])
 
-lolFeaturesNames = ['blueFirstBlood', 'blueKills', 'blueDeaths', 'blueAssists', 'blueEliteMonsters', 'blueDragons', 'blueHeralds', 'blueTowersDestroyed', 'blueGoldDiff', 'blueExperienceDiff']
+lolFeaturesNames = ['blueKillDiff', 'blueGoldDiff', 'blueExperienceDiff'] # , 'blueEliteMonsters', 'blueDragons', 'blueHeralds', 'blueTowersDestroyed', 'blueGoldDiff', 'blueExperienceDiff'
 lolFeaturesList = lolFeaturesDataFrame.values.tolist()
 lolWinList = lolWinDataFrame.values.tolist()
 
