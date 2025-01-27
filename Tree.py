@@ -7,13 +7,13 @@ from sklearn.model_selection import train_test_split
 FraudDataFrame = pd.read_csv('FraudData.csv', delimiter=',', decimal='.')
 
 feature_columns = [
-    'TransactionAmount', 'TransactionType', 'CustomerAge',
+    'TransactionAmount', 'CustomerAge',
     'TransactionDuration', 'LoginAttempts',
     'AccountBalance'
 ]
 
 target_column = 'Fraud'
-
+# przekształcanie dat - raczej się nie przyda
 FraudDataFrame['TransactionDate'] = pd.to_datetime(FraudDataFrame['TransactionDate'])
 FraudDataFrame['PreviousTransactionDate'] = pd.to_datetime(FraudDataFrame['PreviousTransactionDate'])
 FraudDataFrame['TransactionDate'] = (FraudDataFrame['TransactionDate'] - pd.Timestamp("1970-01-01")).dt.total_seconds()

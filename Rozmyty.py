@@ -1,6 +1,4 @@
 
-import numpy as np
-
 def trapeze_area(a, b, h):
     return 0.5*(a+b)*h
 
@@ -14,8 +12,8 @@ class Ranges:
     def temp_low(self):
         if self.T <= 21:
             return 1
-        # elif 18 < self.T <= 21:
-        #     return (21 - self.T) / (21 - 18)
+        elif 18 < self.T <= 21:
+            return (21 - self.T) / (21 - 18)
         elif 21 < self.T <= 23:
             return (23 - self.T) / (23 - 21)
         else:
@@ -70,7 +68,7 @@ class Ranges:
         if self.S >= 22:
             return 1
         elif 19 < self.S <= 22:
-            return (a/tg_a)
+            return a/tg_a
         else:
             return 0
 
@@ -104,67 +102,52 @@ def rules(T, S):
 
     ranges = Ranges(T, S)
 
-    rules = []
+    R1 = min(ranges.temp_low(), ranges.room_low())
+    R2 = min(ranges.temp_low(), ranges.room_mid())
+    R3 = min(ranges.temp_low(), ranges.room_high())
+    R4 = min(ranges.temp_mid(), ranges.room_low())
+    R5 = min(ranges.temp_mid(), ranges.room_mid())
+    R6 = min(ranges.temp_mid(), ranges.room_high())
+    R7 = min(ranges.temp_high(), ranges.room_low())
+    R8 = min(ranges.temp_high(), ranges.room_mid())
+    R9 = min(ranges.temp_high(), ranges.room_high())
 
-    rules.append((min(ranges.temp_low(), ranges.room_low()), "Low"))
-    rules.append((min(ranges.temp_low(), ranges.room_mid()), "Low"))
-    rules.append((min(ranges.temp_low(), ranges.room_high()), "Mid"))
-    rules.append((min(ranges.temp_mid(), ranges.room_low()), "Low"))
-    rules.append((min(ranges.temp_mid(), ranges.room_mid()), "Mid"))
-    rules.append((min(ranges.temp_mid(), ranges.room_high()), "High"))
-    rules.append((min(ranges.temp_high(), ranges.room_low()), "Mid"))
-    rules.append((min(ranges.temp_high(), ranges.room_mid()), "High"))
-    rules.append((min(ranges.temp_high(), ranges.room_high()), "High"))
+    return R1, R2, R3, R4, R5, R6, R7, R8, R9
 
-    return rules
+def rule_aggregation(rules):
 
-    # R1 = min(ranges.temp_low(), ranges.room_low())
-    # R2 = min(ranges.temp_low(), ranges.room_mid())
-    # R3 = min(ranges.temp_low(), ranges.room_high())
-    # R4 = min(ranges.temp_mid(), ranges.room_low())
-    # R5 = min(ranges.temp_mid(), ranges.room_mid())
-    # R6 = min(ranges.temp_mid(), ranges.room_high())
-    # R7 = min(ranges.temp_high(), ranges.room_low())
-    # R8 = min(ranges.temp_high(), ranges.room_mid())
-    # R9 = min(ranges.temp_high(), ranges.room_high())
-    # return R1, R2, R3, R4, R5, R6, R7, R8, R9
+    R1, R2, R3, R4, R5, R6, R7, R8, R9 = rules
+    L = max(R1, R2, R4)
+    M = max(R3, R5, R7)
+    H = max(R6, R8, R9)
 
-# def rule_aggregation(rules):
+    return L, M, H
 
 
+def power_result(rule_aggregation):
 
-# def power_result(p1, c1, p2, c2, p3, c3):
+    L, M, H = rule_aggregation
 
-def wyostrzenie(rules):
-    num = 0
-    den = 0
-    for aktywacja, moc in rules:
-        if moc == "Low":
-            P_range = np.linspace(0, 40, 100)
-            for P in P_range:
-                num += aktywacja * P
-                den += aktywacja
-        elif moc == "Mid":
-            P_range = np.linspace(20, 80, 100)
-            for P in P_range:
-                num += aktywacja * P
-                den += aktywacja
-        elif moc == "High":
-            P_range = np.linspace(60, 100, 100)
-            for P in P_range:
-                num += aktywacja * P
-                den += aktywacja
-    return num / den if den != 0 else 0
+    tg_a = 20
+
+    low_start, low_end = 0, 40
+    mid_start, mid_end = 20, 80
+    high_start, high_end = 60, 100
+
+    P1 = trapeze_area((low_end - low_start) - tg_a * L, low_end - low_start, L)
+    P2 = trapeze_area((mid_end - mid_start) - 2 * tg_a * M, mid_end - mid_start, M)
+    P3 = trapeze_area((high_end - high_start) - tg_a * H, high_end - high_start, H)
+
+    C1 = 0.5 * ((low_end + low_start) - (0.5 * tg_a * L))
+    C2 = 0.5 * (mid_end + mid_start)
+    C3 = 0.5 * (high_end + high_start + (0.5 * tg_a * H))
+#0.5*(80 + ((H * 20 + 60) + 100)/2) też działa ale mówiąc szczerze nie wiem jak to wymyśliłem
+    result = (P1*C1 + P2*C2 + P3*C3)/(P1+P2+P3)
+
+    return result
 
 
-def sterownik(T, S):
-    print(f"Temperatura: {T}, Powierzchnia: {S}")
-    aktywacje = rules(T, S)
-    for aktywacja, moc in aktywacje:
-        print(f"Reguła: Moc = {moc}, Aktywacja = {aktywacja:.3f}")
-    wynik = wyostrzenie(aktywacje)
-    print(f"Wyjściowa moc klimatyzacji: {wynik:.2f}%")
-    return wynik
-
-sterownik(21.5, 21.5)
-print(rules(21.5, 21.5))
+print(power_result(rule_aggregation(rules(50, 111))))
+print(power_result(rule_aggregation(rules(0, 1))))
+print(power_result(rule_aggregation(rules(21.5, 21.5))))
+print(power_result(rule_aggregation(rules(15, 10))))
