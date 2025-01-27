@@ -146,8 +146,5 @@ def power_result(rule_aggregation):
 
     return result
 
-
-print(power_result(rule_aggregation(rules(50, 111))))
-print(power_result(rule_aggregation(rules(0, 1))))
 print(power_result(rule_aggregation(rules(21.5, 21.5))))
 print(power_result(rule_aggregation(rules(22, 26))))
