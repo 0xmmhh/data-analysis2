@@ -1,6 +1,6 @@
 from sklearn.tree import DecisionTreeClassifier
 from sklearn import tree
-
+import matplotlib.pyplot as plt
 import numpy as np
 import pydotplus
 from IPython.display import Image
@@ -33,3 +33,10 @@ dot_data = tree.export_graphviz(clf,
                                 impurity=False)
             
 print(dot_data)
+def fruitstree():
+    plt.figure(figsize=(32, 12))
+    tree.plot_tree(clf, feature_names=['color','diameter'], class_names=['apple','grape','lemon'], filled=True)
+
+    plt.show()
+
+fruitstree()

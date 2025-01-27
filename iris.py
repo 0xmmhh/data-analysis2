@@ -1,6 +1,6 @@
 from sklearn.tree import DecisionTreeClassifier
 from sklearn import tree
-
+import matplotlib.pyplot as plt
 import numpy as np
 import pydotplus
 from IPython.display import Image
@@ -9,11 +9,11 @@ from sklearn.datasets import load_iris
 
 iris = load_iris()
 
-print(iris.feature_names) # ['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)']
-print(iris.target_names) # ['setosa' 'versicolor' 'virginica']
+print(iris.feature_names)  # ['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)']
+print(iris.target_names)  # ['setosa' 'versicolor' 'virginica']
 
-print(iris.data[0]) #first flower - features
-print(iris.target[0]) #first flower - class
+print(iris.data[0])  #first flower - features
+print(iris.target[0])  #first flower - class
 
 test_idx = [0, 3, 5, 50, 53, 55, 100, 103, 105]
 
@@ -27,17 +27,28 @@ clf = DecisionTreeClassifier(random_state=1234)
 
 model = clf.fit(train_data, train_target)
 
-print(test_target) # should be
-print(clf.predict(test_data)) # is
+print(test_target)  # should be
+print(clf.predict(test_data))  # is
 
 model
 
-dot_data = tree.export_graphviz(model, 
-                                out_file=None, 
-                                feature_names=iris.feature_names, 
-                                class_names=iris.target_names, 
-                                filled=True, 
-                                rounded=True, 
+dot_data = tree.export_graphviz(model,
+                                out_file=None,
+                                feature_names=iris.feature_names,
+                                class_names=iris.target_names,
+                                filled=True,
+                                rounded=True,
                                 impurity=False)
 
 print(dot_data)
+
+
+def iristree():
+    plt.figure(figsize=(12, 8))
+    tree.plot_tree(clf, feature_names=['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)',
+                                       'petal width (cm)'],
+                   class_names=['setosa', 'versicolor', 'virginica'], filled=True)
+    plt.show()
+
+
+iristree()
