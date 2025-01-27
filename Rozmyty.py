@@ -142,7 +142,7 @@ def power_result(rule_aggregation):
     C2 = 0.5 * (mid_end + mid_start)
     C3 = 0.5 * (high_end + high_start + (0.5 * tg_a * H))
 #0.5*(80 + ((H * 20 + 60) + 100)/2) też działa ale mówiąc szczerze nie wiem jak to wymyśliłem
-    result = (P1*C1 + P2*C2 + P3*C3)/(P1+P2+P3)
+    result = (P1*C1 + P2*C2 + P3*C3)/(P1+P2+P3) if (P1+P2+P3) != 0 else 0
 
     return result
 
@@ -150,4 +150,4 @@ def power_result(rule_aggregation):
 print(power_result(rule_aggregation(rules(50, 111))))
 print(power_result(rule_aggregation(rules(0, 1))))
 print(power_result(rule_aggregation(rules(21.5, 21.5))))
-print(power_result(rule_aggregation(rules(15, 10))))
+print(power_result(rule_aggregation(rules(22, 26))))
